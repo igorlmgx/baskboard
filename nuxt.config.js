@@ -41,6 +41,11 @@ export default {
     '@nuxtjs/axios',
   ],
 
+  // Enviroment variables
+  env: {
+    API_URL: "https://zqjf5hn9ah.execute-api.us-east-1.amazonaws.com/query"
+  },
+
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
 
@@ -48,7 +53,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
