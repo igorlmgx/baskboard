@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col cols="2">
+      <v-col cols="8" md="2">
         <v-autocomplete
           :items="teams"
           :item-text="
@@ -13,16 +13,17 @@
           @input="filterTeams"
         ></v-autocomplete>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="8" md="2">
         <v-select
           :items="attributes"
           v-model="attr1"
           return-object
           label="Attribute 1"
           solo
-        ></v-select>
+        >
+        </v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="8" md="2">
         <v-select
           :items="attributes"
           v-model="attr2"
@@ -31,7 +32,7 @@
           solo
         ></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="8" md="2">
         <v-select
           :items="attributes"
           v-model="attr3"
@@ -40,7 +41,7 @@
           solo
         ></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="8" md="2">
         <v-select
           :items="attributes"
           v-model="attr4"
@@ -80,29 +81,29 @@ export default {
       teams: [],
       filtered_teams: [],
       attributes: [
-        { value: "wins", text: "Wins" },
-        { value: "losses", text: "Losses" },
-        { value: "possessions", text: "Possessions" },
-        { value: "minutes", text: "Minutes played" },
-        { value: "field_goals_percentage", text: "Field goals %" },
-        { value: "two_pointers_percentage", text: "2 pointers %" },
-        { value: "three_pointers_percentage", text: "3 pointers %" },
-        { value: "free_throws_percentage", text: "Free throws %" },
-        { value: "offensive_rebounds", text: "Offensive rebounds" },
-        { value: "defensive_rebounds", text: "Defensive rebounds" },
-        { value: "rebounds", text: "Total rebounds" },
-        { value: "assists", text: "Assists" },
-        { value: "steals", text: "Steals" },
-        { value: "turnovers", text: "Turnovers" },
-        { value: "points", text: "Points" },
-        { value: "blocked_shots", text: "Blocked shots" },
-        { value: "double_doubles", text: "Double doubles" },
-        { value: "triple_doubles", text: "Triple doubles" },
+        "Wins",
+        "Losses",
+        "Possessions",
+        "Minutes",
+        "Field goals %",
+        "Two pointers %",
+        "Three pointers %",
+        "Free throws %",
+        "Offensive rebounds",
+        "Defensive rebounds",
+        "Rebounds",
+        "Assists",
+        "Steals",
+        "Turnovers",
+        "Points",
+        "Blocked shots",
+        "Double doubles",
+        "Triple doubles",
       ],
-      attr1: { value: "wins", text: "Wins" },
-      attr2: { value: "losses", text: "Losses" },
-      attr3: { value: "possessions", text: "Possessions" },
-      attr4: { value: "points", text: "Points" },
+      attr1: "Wins",
+      attr2: "Losses",
+      attr3: "Possessions",
+      attr4: "Points",
     };
   },
   components: {
@@ -114,7 +115,12 @@ export default {
       "teams.primary_color, teams.secondary_color, teams.wikipedia_logo_url";
 
     for (let i in this.attributes) {
-      fields += ", team_stats." + this.attributes[i].value;
+      fields +=
+        ", team_stats." +
+        this.attributes[i]
+          .toLowerCase()
+          .replace(/\ /g, "_")
+          .replace(/\%/g, "percentage");
     }
 
     const query =
@@ -134,7 +140,7 @@ export default {
   methods: {
     filterTeams(value) {
       if (value) {
-        const key = value.substring(value.indexOf('(') + 1, value.indexOf(')'));
+        const key = value.substring(value.indexOf("(") + 1, value.indexOf(")"));
         for (let i in this.teams) {
           if (this.teams[i].key === key) {
             this.filtered_teams = [this.teams[i]];

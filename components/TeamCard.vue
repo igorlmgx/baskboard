@@ -23,20 +23,20 @@
       <h2>{{ team.name }}</h2>
     </v-col>
     <v-col cols="12" md="2" class="text-center">
-      <h2>{{ team[attr1.value] }}</h2>
-      <h4>{{ attr1.text }}</h4>
+      <h2>{{ team[attr1.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
+      <h4>{{ attr1 }}</h4>
     </v-col>
     <v-col cols="12" md="2" class="text-center">
-      <h2>{{ team[attr2.value] }}</h2>
-      <h4>{{ attr2.text }}</h4>
+      <h2>{{ team[attr2.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
+      <h4>{{ attr2 }}</h4>
     </v-col>
     <v-col cols="12" md="2" class="text-center">
-      <h2>{{ team[attr3.value] }}</h2>
-      <h4>{{ attr3.text }}</h4>
+      <h2>{{ team[attr3.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
+      <h4>{{ attr3 }}</h4>
     </v-col>
     <v-col cols="12" md="2" class="text-center">
-      <h2>{{ team[attr4.value] }}</h2>
-      <h4>{{ attr4.text }}</h4>
+      <h2>{{ team[attr4.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
+      <h4>{{ attr4 }}</h4>
     </v-col>
     <v-col cols="12" md="1" class="btn-details">
       <v-btn :to="'/teams/' + team.team_id" nuxt fab light small>
@@ -50,10 +50,10 @@
 export default {
   props: {
     team: Object,
-    attr1: Object,
-    attr2: Object,
-    attr3: Object,
-    attr4: Object,
+    attr1: String,
+    attr2: String,
+    attr3: String,
+    attr4: String,
   },
 };
 </script>
