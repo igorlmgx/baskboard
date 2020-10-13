@@ -22,11 +22,72 @@
       <v-tab>Players</v-tab>
       <v-tab>Stats</v-tab>
     </v-tabs>
-    <v-container>
-      <v-tabs-items v-model="tab">
-        <v-tab-item> </v-tab-item>
-        <v-tab-item>
-          <v-row justify="center" align="center" style="height: 5.5rem">
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <v-row justify="center" align="center" class="filter-row">
+          <v-col cols="8" md="2" offset-md="2">
+            <v-select
+              :items="attributes"
+              v-model="attr1"
+              return-object
+              label="Attribute 1"
+              solo
+              flat
+            >
+            </v-select>
+          </v-col>
+          <v-col cols="8" md="2">
+            <v-select
+              :items="attributes"
+              v-model="attr2"
+              return-object
+              label="Attribute 2"
+              solo
+              flat
+            ></v-select>
+          </v-col>
+          <v-col cols="8" md="2">
+            <v-select
+              :items="attributes"
+              v-model="attr3"
+              return-object
+              label="Attribute 3"
+              solo
+              flat
+            ></v-select>
+          </v-col>
+          <v-col cols="8" md="2">
+            <v-select
+              :items="attributes"
+              v-model="attr4"
+              return-object
+              label="Attribute 4"
+              solo
+              flat
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row
+          justify="center"
+          align="center"
+          class="mt-5"
+          v-for="player in team_players"
+          :key="player.player_id"
+        >
+          <v-col cols="10">
+            <PlayerCard
+              :player="player"
+              :attr1="attr1"
+              :attr2="attr2"
+              :attr3="attr3"
+              :attr4="attr4"
+            />
+          </v-col>
+        </v-row>
+      </v-tab-item>
+      <v-tab-item>
+        <v-container>
+          <v-row justify="center" align="center" class="stat-row">
             <v-col md="4">
               <h2>Team</h2>
             </v-col>
@@ -39,7 +100,7 @@
             </v-col>
           </v-row>
           <v-divider></v-divider>
-          <v-row justify="center" align="center" style="height: 5.5rem">
+          <v-row justify="center" align="center" class="stat-row">
             <v-col md="4">
               <h2>Conference</h2>
             </v-col>
@@ -50,7 +111,7 @@
             </v-col>
           </v-row>
           <v-divider></v-divider>
-          <v-row justify="center" align="center" style="height: 5.5rem">
+          <v-row justify="center" align="center" class="stat-row">
             <v-col md="4">
               <h2>Division</h2>
             </v-col>
@@ -64,7 +125,7 @@
               v-if="value"
               justify="center"
               align="center"
-              style="height: 5.5rem"
+              class="stat-row"
             >
               <v-col md="4">
                 <h2>
@@ -82,9 +143,9 @@
             </v-row>
             <v-divider v-if="value"></v-divider>
           </div>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-container>
+        </v-container>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -98,6 +159,31 @@ export default {
       team_stats: [],
       team_players: [],
       tab: {},
+      attributes: [
+        "Position",
+        "Minutes",
+        "Field goals %",
+        "Two pointers %",
+        "Three pointers %",
+        "Free throws %",
+        "Usage rate %",
+        "Player efficiency rating",
+        "Offensive rebounds",
+        "Defensive rebounds",
+        "Rebounds",
+        "Assists",
+        "Steals",
+        "Turnovers",
+        "Points",
+        "Blocked shots",
+        "Personal fouls",
+        "Double doubles",
+        "Triple doubles",
+      ],
+      attr1: "Position",
+      attr2: "Usage rate %",
+      attr3: "Assists",
+      attr4: "Field goals %",
     };
   },
   async mounted() {
@@ -108,9 +194,23 @@ export default {
       "offensive_rebounds, defensive_rebounds, rebounds, assists, steals, blocked_shots, turnovers, personal_fouls, points, true_shooting_attempts, " +
       "true_shooting_percentage, plus_minus, double_doubles, triple_doubles";
 
+    let player_fields =
+      "players.player_id, players.photo_url, players.height, players.weight, players.jersey, player_stats.name";
+
+    for (let i in this.attributes) {
+      player_fields +=
+        ", player_stats." +
+        this.attributes[i]
+          .toLowerCase()
+          .replace(/\ /g, "_")
+          .replace(/\%/g, "percentage");
+    }
+
     const query_data = `SELECT * FROM teams WHERE team_id = ${this.$route.params.id}`;
     const query_stats = `SELECT ${stats_fields} FROM team_stats WHERE team_id = ${this.$route.params.id}`;
-    const query_players = `SELECT * FROM players WHERE team_id = ${this.$route.params.id}`;
+    const query_players =
+      `SELECT ${player_fields} FROM players, player_stats WHERE players.player_id = player_stats.player_id ` +
+      `AND players.team_id = ${this.$route.params.id}`;
 
     await axios
       .post(process.env.API_URL, query_data)
@@ -153,5 +253,17 @@ export default {
   -o-filter: blur(6px);
   -ms-filter: blur(6px);
   filter: blur(6px);
+}
+.filter-row {
+  background-color: #5551;
+}
+.stat-row {
+  min-height: 5.5rem;
+}
+@media (max-width: 959px) {
+  .stat-row h2 {
+    font-size: 1.2rem !important;
+    font-weight: normal;
+  }
 }
 </style>
