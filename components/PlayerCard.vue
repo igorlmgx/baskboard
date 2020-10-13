@@ -2,7 +2,8 @@
   <v-row no-gutters class="player-row" align="center">
     <v-col cols="12" md="1">
       <v-img
-        height="150px"
+        max-height="150px"
+        min-height="110px"
         contain
         style="background-color: #fff; border-radius: 0.3rem"
         :src="player.photo_url"
