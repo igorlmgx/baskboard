@@ -45,6 +45,7 @@
           v-model="attr4"
           return-object
           label="Attribute 4"
+          @change="sort_players"
           solo
         ></v-select>
       </v-col>
@@ -52,7 +53,7 @@
     <v-tabs v-model="pagination" vertical hide-slider>
       <v-tab-item
         v-for="(n, pag_index) in ~~(filtered_players.length / 10) > 1
-          ? (~~(filtered_players.length / 10) + 2)
+          ? ~~(filtered_players.length / 10) + 2
           : 2"
         :key="pag_index"
       >
@@ -84,7 +85,7 @@
           v-model="pagination"
           :length="
             ~~(filtered_players.length / 10) > 1
-              ? (~~(filtered_players.length / 10) +1)
+              ? ~~(filtered_players.length / 10) + 1
               : 1
           "
           :total-visible="7"
@@ -106,22 +107,22 @@ export default {
       teams: [],
       pagination: 1,
       attributes: [
-        "Minutes",
-        "Field goals %",
-        "Two pointers %",
-        "Three pointers %",
-        "Free throws %",
-        "Offensive rebounds",
-        "Defensive rebounds",
-        "Team",
-        "Rebounds",
         "Assists",
-        "Steals",
-        "Turnovers",
-        "Points",
         "Blocked shots",
+        "Defensive rebounds",
         "Double doubles",
+        "Field goals %",
+        "Free throws %",
+        "Minutes",
+        "Offensive rebounds",
+        "Points",
+        "Rebounds",
+        "Steals",
+        "Team",
+        "Three pointers %",
         "Triple doubles",
+        "Turnovers",
+        "Two pointers %",
       ],
       attr1: "Team",
       attr2: "Minutes",
@@ -138,11 +139,7 @@ export default {
 
     for (let i in this.attributes) {
       player_fields +=
-        ", player_stats." +
-        this.attributes[i]
-          .toLowerCase()
-          .replace(/\ /g, "_")
-          .replace(/\%/g, "percentage");
+        ", player_stats." + this.unformat_attr(this.attributes[i]);
     }
 
     const query_teams = "SELECT DISTINCT team FROM player_stats";
@@ -161,7 +158,7 @@ export default {
         console.log(error);
       });
 
-      await axios
+    await axios
       .post(process.env.API_URL, query_teams)
       .then((response) => {
         this.teams = response.data;
@@ -169,8 +166,16 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+    this.sort_players(this.attr4);
   },
   methods: {
+    unformat_attr(attr) {
+      return attr
+        .toLowerCase()
+        .replace(/\ /g, "_")
+        .replace(/\%/g, "percentage");
+    },
     filter_name(value) {
       if (value) {
         const name = value.substring(0, value.indexOf("(") - 1);
@@ -196,6 +201,12 @@ export default {
       } else {
         this.filtered_players = this.players;
       }
+    },
+    sort_players(value) {
+      const attr = this.unformat_attr(value);
+      this.filtered_players.sort(function (a, b) {
+        return a[attr] > b[attr] ? -1 : a[attr] > b[attr] ? 1 : 0;
+      });
     },
   },
 };

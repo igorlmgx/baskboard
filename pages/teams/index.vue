@@ -47,6 +47,7 @@
           v-model="attr4"
           return-object
           label="Attribute 4"
+          @change="sort_teams"
           solo
         ></v-select>
       </v-col>
@@ -83,22 +84,22 @@ export default {
       attributes: [
         "Wins",
         "Losses",
-        "Possessions",
-        "Minutes",
-        "Field goals %",
-        "Two pointers %",
-        "Three pointers %",
-        "Free throws %",
-        "Offensive rebounds",
-        "Defensive rebounds",
-        "Rebounds",
         "Assists",
-        "Steals",
-        "Turnovers",
-        "Points",
         "Blocked shots",
+        "Defensive rebounds",
         "Double doubles",
+        "Field goals %",
+        "Free throws %",
+        "Minutes",
+        "Offensive rebounds",
+        "Points",
+        "Possessions",
+        "Rebounds",
+        "Steals",
+        "Three pointers %",
         "Triple doubles",
+        "Turnovers",
+        "Two pointers %",
       ],
       attr1: "Wins",
       attr2: "Losses",
@@ -115,12 +116,7 @@ export default {
       "teams.primary_color, teams.secondary_color, teams.wikipedia_logo_url";
 
     for (let i in this.attributes) {
-      fields +=
-        ", team_stats." +
-        this.attributes[i]
-          .toLowerCase()
-          .replace(/\ /g, "_")
-          .replace(/\%/g, "percentage");
+      fields += ", team_stats." + this.unformat_attr(this.attributes[i]);
     }
 
     const query =
@@ -136,8 +132,16 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+    this.sort_teams(this.attr4);
   },
   methods: {
+    unformat_attr(attr) {
+      return attr
+        .toLowerCase()
+        .replace(/\ /g, "_")
+        .replace(/\%/g, "percentage");
+    },
     filterTeams(value) {
       if (value) {
         const key = value.substring(value.indexOf("(") + 1, value.indexOf(")"));
@@ -149,6 +153,12 @@ export default {
       } else {
         this.filtered_teams = this.teams;
       }
+    },
+    sort_teams(value) {
+      const attr = this.unformat_attr(value);
+      this.filtered_teams.sort(function (a, b) {
+        return a[attr] > b[attr] ? -1 : a[attr] > b[attr] ? 1 : 0;
+      });
     },
   },
 };
