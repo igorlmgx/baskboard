@@ -8,17 +8,18 @@
           clearable
           solo
           label="Player's name"
-          @input="filterplayers"
+          @input="filter_name"
         ></v-autocomplete>
       </v-col>
       <v-col cols="8" md="2">
-        <v-select
-          :items="attributes"
-          v-model="attr1"
-          return-object
-          label="Attribute 1"
+        <v-autocomplete
+          :items="teams"
+          :item-text="(teams) => teams.team"
+          clearable
           solo
-        ></v-select>
+          label="Player's team"
+          @input="filter_team"
+        ></v-autocomplete>
       </v-col>
       <v-col cols="8" md="2">
         <v-select
@@ -50,8 +51,8 @@
     </v-row>
     <v-tabs v-model="pagination" vertical hide-slider>
       <v-tab-item
-        v-for="(n, pag_index) in ~~(filtered_players.length / 10) > 0
-          ? ~~(filtered_players.length / 10)
+        v-for="(n, pag_index) in ~~(filtered_players.length / 10) > 1
+          ? (~~(filtered_players.length / 10) + 2)
           : 2"
         :key="pag_index"
       >
@@ -83,7 +84,7 @@
           v-model="pagination"
           :length="
             ~~(filtered_players.length / 10) > 1
-              ? ~~(filtered_players.length / 10) - 1
+              ? (~~(filtered_players.length / 10) +1)
               : 1
           "
           :total-visible="7"
@@ -102,6 +103,7 @@ export default {
     return {
       players: [],
       filtered_players: [],
+      teams: [],
       pagination: 1,
       attributes: [
         "Minutes",
@@ -143,12 +145,14 @@ export default {
           .replace(/\%/g, "percentage");
     }
 
-    const query =
+    const query_teams = "SELECT DISTINCT team FROM player_stats";
+
+    const query_players =
       "SELECT " +
       player_fields +
       " FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id";
     await axios
-      .post(process.env.API_URL, query)
+      .post(process.env.API_URL, query_players)
       .then((response) => {
         this.players = response.data;
         this.filtered_players = response.data;
@@ -156,15 +160,37 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+      await axios
+      .post(process.env.API_URL, query_teams)
+      .then((response) => {
+        this.teams = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
-    filterplayers(value) {
+    filter_name(value) {
       if (value) {
         const name = value.substring(0, value.indexOf("(") - 1);
         for (let i in this.players) {
-          if (this.players[i].name == name) {
+          if (this.players[i].name === name) {
             this.filtered_players = [this.players[i]];
             this.pagination = 1;
+          }
+        }
+      } else {
+        this.filtered_players = this.players;
+      }
+    },
+    filter_team(value) {
+      if (value) {
+        this.filtered_players = [];
+        this.pagination = 1;
+        for (let i in this.players) {
+          if (this.players[i].team === value) {
+            this.filtered_players.push(this.players[i]);
           }
         }
       } else {
