@@ -246,6 +246,9 @@ export default {
 .parallax-text {
   background-color: #0004;
 }
+.parallax-text h1 {
+  text-shadow: 1px 1px 5px #222;
+}
 .v-parallax__content {
   padding: 0 !important;
 }

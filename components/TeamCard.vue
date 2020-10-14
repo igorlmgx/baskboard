@@ -22,19 +22,19 @@
       <h2>{{ team.city }}</h2>
       <h2>{{ team.name }}</h2>
     </v-col>
-    <v-col cols="12" md="2" class="text-center">
+    <v-col cols="12" md="2" class="attribute">
       <h2>{{ team[attr1.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
       <h4>{{ attr1 }}</h4>
     </v-col>
-    <v-col cols="12" md="2" class="text-center">
+    <v-col cols="12" md="2" class="attribute">
       <h2>{{ team[attr2.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
       <h4>{{ attr2 }}</h4>
     </v-col>
-    <v-col cols="12" md="2" class="text-center">
+    <v-col cols="12" md="2" class="attribute">
       <h2>{{ team[attr3.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
       <h4>{{ attr3 }}</h4>
     </v-col>
-    <v-col cols="12" md="2" class="text-center">
+    <v-col cols="12" md="2" class="attribute">
       <h2>{{ team[attr4.toLowerCase().replace(/\ /g, '_').replace(/\%/g, 'percentage')] }}</h2>
       <h4>{{ attr4 }}</h4>
     </v-col>
@@ -62,10 +62,20 @@ export default {
 .team-row {
   border-radius: 0.5rem;
 }
+.attribute {
+  text-align: center;
+}
 .btn-details {
   text-align: center;
 }
 @media (max-width: 959px) {
+  .team-row {
+    border: none !important;
+  }
+  .attribute {
+    text-align: left;
+    margin-left: 1.5rem;
+  }
   .btn-details {
     text-align: right;
   }

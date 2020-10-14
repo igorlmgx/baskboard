@@ -4,9 +4,9 @@
       <v-row justify="center">
         <v-col cols="10" md="5" xl="4">
           <div v-show="!player1">
-            <h1 class="display-3 mb-12">Pick a team</h1>
+            <h1 class="display-3 mb-12 moveUp">Pick a team</h1>
             <v-autocomplete
-              class="mb-12"
+              class="mb-12 moveUp"
               v-model="team1"
               :items="teams"
               :item-text="
@@ -21,8 +21,9 @@
             ></v-autocomplete>
           </div>
           <div v-show="!team1">
-            <h1 class="display-3 mb-12">Or a player</h1>
+            <h1 class="display-3 mb-12 moveUp2 moveUp">Or a player</h1>
             <v-autocomplete
+              class="moveUp moveUp2"
               v-model="player1"
               :items="players"
               :item-text="
@@ -82,7 +83,7 @@
         </v-col>
       </v-row>
       <v-row
-        v-if="team1"
+        v-if="team1_stats"
         justify="center"
         align="center"
         style="background-color: #fff1"
@@ -139,7 +140,11 @@
         <v-row align="center" justify="center" class="text-center my-3">
           <v-col cols="4">
             <p
-              :class="parseFloat(team1_stats[key]) > parseFloat(team2_stats[key]) ? 'higher' : ''"
+              :class="
+                parseFloat(team1_stats[key]) > parseFloat(team2_stats[key])
+                  ? 'higher'
+                  : ''
+              "
               class="mb-0"
             >
               {{ team1_stats[key] }}
@@ -154,7 +159,11 @@
           </v-col>
           <v-col cols="4">
             <p
-              :class="parseFloat(team2_stats[key]) > parseFloat(team1_stats[key]) ? 'higher' : ''"
+              :class="
+                parseFloat(team2_stats[key]) > parseFloat(team1_stats[key])
+                  ? 'higher'
+                  : ''
+              "
               class="mb-0"
             >
               {{ team2_stats[key] }}
@@ -169,7 +178,11 @@
         <v-row align="center" justify="center" class="text-center my-3">
           <v-col cols="4">
             <p
-              :class="parseFloat(player1_stats[key]) > parseFloat(player2_stats[key]) ? 'higher' : ''"
+              :class="
+                parseFloat(player1_stats[key]) > parseFloat(player2_stats[key])
+                  ? 'higher'
+                  : ''
+              "
               class="mb-0"
             >
               {{ player1_stats[key] }}
@@ -184,7 +197,11 @@
           </v-col>
           <v-col cols="4">
             <p
-              :class="parseFloat(player2_stats[key]) > parseFloat(player1_stats[key]) ? 'higher' : ''"
+              :class="
+                parseFloat(player2_stats[key]) > parseFloat(player1_stats[key])
+                  ? 'higher'
+                  : ''
+              "
               class="mb-0"
             >
               {{ player2_stats[key] }}
@@ -199,7 +216,52 @@
 
 <style scoped>
 .higher {
-  color: #00c853;
+  color: #00e676;
+}
+
+.moveUp {
+  -webkit-animation: moveUp 1s;
+  -moz-animation: moveUp 1s;
+  animation: moveUp 1s;
+}
+
+.moveUp2 {
+  -webkit-animation: moveUp ease-in 1s;
+  -moz-animation: moveUp ease-in 1s;
+  animation: moveUp ease-in 1s;
+}
+
+@keyframes moveUp {
+  from {
+    transform: translate3d(0, 200px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes moveUp {
+  from {
+    transform: translate3d(0, 200px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes moveUp {
+  from {
+    transform: translate3d(0, 200px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 </style>
 

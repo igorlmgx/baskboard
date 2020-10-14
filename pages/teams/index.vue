@@ -1,12 +1,13 @@
 <template>
   <v-container fluid>
-    <v-row justify="center">
+    <v-row justify="center" align="end">
       <v-col cols="8" md="2">
         <v-autocomplete
           :items="teams"
           :item-text="
             (teams) => teams.city + ' ' + teams.name + ' (' + teams.key + ')'
           "
+          hide-details
           clearable
           solo
           label="Team's name"
@@ -17,6 +18,7 @@
         <v-select
           :items="attributes"
           v-model="attr1"
+          hide-details
           return-object
           label="Attribute 1"
           solo
@@ -27,6 +29,7 @@
         <v-select
           :items="attributes"
           v-model="attr2"
+          hide-details
           return-object
           label="Attribute 2"
           solo
@@ -36,15 +39,18 @@
         <v-select
           :items="attributes"
           v-model="attr3"
+          hide-details
           return-object
           label="Attribute 3"
           solo
         ></v-select>
       </v-col>
       <v-col cols="8" md="2">
+        <p class="mb-1">Order by</p>
         <v-select
           :items="attributes"
           v-model="attr4"
+          hide-details
           return-object
           label="Attribute 4"
           @change="sort_teams"
@@ -157,7 +163,7 @@ export default {
     sort_teams(value) {
       const attr = this.unformat_attr(value);
       this.filtered_teams.sort(function (a, b) {
-        return a[attr] > b[attr] ? -1 : a[attr] > b[attr] ? 1 : 0;
+        return parseFloat(a[attr]) > parseFloat(b[attr]) ? -1 : a[attr] > b[attr] ? 1 : 0;
       });
     },
   },

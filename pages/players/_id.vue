@@ -1,50 +1,59 @@
 <template>
-  <v-container>
-    <v-row align="center" class="mx-2 mb-8" v-if="player_data">
-      <v-col cols="4" md="2" xl="1">
-        <v-img
-          max-height="150px"
-          min-height="110px"
-          contain
-          style="background-color: #fff; border-radius: 0.5rem"
-          :src="player_data.photo_url"
-        ></v-img>
-      </v-col>
-      <v-col cols="8" md="4">
-        <h1 class="display-2">{{ player_data.first_name }}</h1>
-        <h1 class="display-2">{{ player_data.last_name }}</h1>
-      </v-col>
-      <v-col cols="12" md="10" xl="6">
-        <p class="text-justify">
-          {{ player_data.first_name }} {{ player_data.last_name }} is a
-          {{ calcAge(player_data.birth_date) }} years old player with
-          {{ player_data.experience }} years of experience in the NBA.<br />
-          <span v-if="player_data.birth_city"
-            >Born in {{ player_data.birth_city }},
-            {{ player_data.birth_state }}, </span
-          >{{ player_data.first_name }} is currently playing on
-          {{ player_data.team_name }} as a
-          {{ getPosition(player_data.position) }}, jersey
-          {{ player_data.jersey }}.<br />
-          His currently salary is U$
-          {{ player_data.salary.toLocaleString() }}.
-        </p>
-      </v-col>
-    </v-row>
-    <div v-for="(value, key, index) in this.player_stats" :key="index">
-      <v-row v-if="value" justify="center" align="center" class="stat-row">
-        <v-col md="4">
-          <h2>
-            {{ (key[0].toUpperCase() + key.substring(1)).replace(/\_/g, " ") }}
-          </h2>
-        </v-col>
-        <v-col md="4">
-          <h2>{{ value }}</h2>
+  <div>
+    <v-parallax :src="require('@/assets/images/player_bg.jpg')">
+      <v-row class="parallax-text" align="center" justify="center">
+        <v-col class="text-center" cols="12">
+          <h1 v-if="player_data" class="display-4 font-weight-bold mb-2">
+            {{ player_data.first_name }} {{ player_data.last_name }}
+          </h1>
         </v-col>
       </v-row>
-      <v-divider v-if="value"></v-divider>
-    </div>
-  </v-container>
+    </v-parallax>
+    <v-container>
+      <v-row justify="center" align="center" class="mx-2 mb-8" v-if="player_data">
+        <v-col cols="4" md="2" xl="1">
+          <v-img
+            max-height="150px"
+            min-height="110px"
+            contain
+            style="background-color: #fff; border-radius: 0.5rem"
+            :src="player_data.photo_url"
+          ></v-img>
+        </v-col>
+        <v-col cols="12" md="8" xl="7">
+          <p class="text-justify">
+            {{ player_data.first_name }} {{ player_data.last_name }} is a
+            {{ calcAge(player_data.birth_date) }} years old player with
+            {{ player_data.experience }} years of experience in the NBA.<br />
+            <span v-if="player_data.birth_city"
+              >Born in {{ player_data.birth_city }},
+              {{ player_data.birth_state }}, </span
+            >{{ player_data.first_name }} is currently playing on
+            {{ player_data.team_name }} as a
+            {{ getPosition(player_data.position) }}, jersey
+            {{ player_data.jersey }}.<br />
+            His currently salary is U$
+            {{ player_data.salary.toLocaleString() }}.
+          </p>
+        </v-col>
+      </v-row>
+      <div v-for="(value, key, index) in this.player_stats" :key="index">
+        <v-row v-if="value" justify="center" align="center" class="stat-row">
+          <v-col md="4">
+            <h2>
+              {{
+                (key[0].toUpperCase() + key.substring(1)).replace(/\_/g, " ")
+              }}
+            </h2>
+          </v-col>
+          <v-col md="4">
+            <h2>{{ value }}</h2>
+          </v-col>
+        </v-row>
+        <v-divider v-if="value"></v-divider>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -124,6 +133,22 @@ export default {
 </script>
 
 <style>
+.parallax-text {
+  background-color: #0004;
+}
+.parallax-text h1 {
+  text-shadow: 2px 2px 5px #222;
+}
+.v-parallax__content {
+  padding: 0 !important;
+}
+.v-parallax__image {
+  -webkit-filter: blur(6px);
+  -moz-filter: blur(6px);
+  -o-filter: blur(6px);
+  -ms-filter: blur(6px);
+  filter: blur(6px);
+}
 .stat-row {
   min-height: 5.5rem;
 }
