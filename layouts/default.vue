@@ -41,6 +41,11 @@ export default {
       drawer: true,
       items: [
         {
+          icon: "mdi-home",
+          title: "Home",
+          to: "/",
+        },
+        {
           icon: "mdi-basketball",
           title: "Teams",
           to: "/teams",

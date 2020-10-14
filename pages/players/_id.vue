@@ -65,8 +65,7 @@ export default {
       "player_stats.personal_fouls, player_stats.player_efficiency_rating, player_stats.points, player_stats.Rebounds, player_stats.steals_percentage, player_stats.steals, " +
       "player_stats.three_pointers_percentage, player_stats.three_pointers_attempted, player_stats.three_pointers_made, player_stats.triple_doubles, " +
       "player_stats.true_shooting_percentage, player_stats.true_shooting_attempts, player_stats.turn_overs_percentage, player_stats.turnovers, " +
-      "player_stats.two_pointers_percentage, player_stats.two_pointers_attempted, player_stats.two_pointers_made, player_stats.usage_rate_percentage, " +
-      "players.injury_status, players.injury_body_part, players.injury_start_date";
+      "player_stats.two_pointers_percentage, player_stats.two_pointers_attempted, player_stats.two_pointers_made, player_stats.usage_rate_percentage";
 
     let player_fields =
       "players.first_name, players.last_name, players.position, players.jersey, players.height, players.weight, players.team, players.salary, " +
@@ -81,7 +80,7 @@ export default {
           .replace(/\%/g, "percentage");
     }
 
-    const query_stats = `SELECT ${stats_fields} FROM players, player_stats WHERE player_stats.player_id = ${this.$route.params.id} AND players.player_id = player_stats.player_id`;
+    const query_stats = `SELECT ${stats_fields} FROM player_stats WHERE player_stats.player_id = ${this.$route.params.id}`;
     const query_data = `SELECT ${player_fields} FROM players, team_stats WHERE players.team_id = team_stats.team_id AND players.player_id = ${this.$route.params.id}`;
 
     await axios
