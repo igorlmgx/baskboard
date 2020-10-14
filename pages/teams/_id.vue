@@ -4,16 +4,16 @@
       <v-row class="parallax-text" align="center" justify="center">
         <v-col class="text-center" cols="12">
           <v-img
-            v-if="this.team_data[0]"
+            v-if="this.team_data"
             height="200px"
             contain
-            :src="this.team_data[0].wikipedia_logo_url"
+            :src="this.team_data.wikipedia_logo_url"
           ></v-img>
-          <h1 v-if="this.team_data[0]" class="display-3 font-weight-bold mb-2">
-            {{ this.team_data[0].city }}
+          <h1 v-if="this.team_data" class="display-3 font-weight-bold mb-2">
+            {{ this.team_data.city }}
           </h1>
-          <h1 v-if="this.team_data[0]" class="display-3 font-weight-bold">
-            {{ this.team_data[0].name }}
+          <h1 v-if="this.team_data" class="display-3 font-weight-bold">
+            {{ this.team_data.name }}
           </h1>
         </v-col>
       </v-row>
@@ -92,9 +92,9 @@
               <h2>Team</h2>
             </v-col>
             <v-col md="4">
-              <h2 v-if="this.team_data[0]">
-                {{ this.team_data[0].city }} {{ this.team_data[0].name }} ({{
-                  this.team_data[0].key
+              <h2 v-if="this.team_data">
+                {{ this.team_data.city }} {{ this.team_data.name }} ({{
+                  this.team_data.key
                 }})
               </h2>
             </v-col>
@@ -105,8 +105,8 @@
               <h2>Conference</h2>
             </v-col>
             <v-col md="4">
-              <h2 v-if="this.team_data[0]">
-                {{ this.team_data[0].conference }}
+              <h2 v-if="this.team_data">
+                {{ this.team_data.conference }}
               </h2>
             </v-col>
           </v-row>
@@ -116,11 +116,11 @@
               <h2>Division</h2>
             </v-col>
             <v-col md="4">
-              <h2 v-if="this.team_data[0]">{{ this.team_data[0].division }}</h2>
+              <h2 v-if="this.team_data">{{ this.team_data.division }}</h2>
             </v-col>
           </v-row>
           <v-divider></v-divider>
-          <div v-for="(value, key, index) in this.team_stats[0]" :key="index">
+          <div v-for="(value, key, index) in this.team_stats" :key="index">
             <v-row
               v-if="value"
               justify="center"
@@ -155,9 +155,9 @@ const axios = require("axios");
 export default {
   data() {
     return {
-      team_data: [],
-      team_stats: [],
-      team_players: [],
+      team_data: null,
+      team_stats: null,
+      team_players: null,
       tab: {},
       attributes: [
         "Position",
@@ -188,11 +188,11 @@ export default {
   },
   async mounted() {
     const stats_fields =
-      "wins, losses, assists, blocked_shots, defensive_rebounds, double_doubles," +
-      "effective_field_goals_percentage, fantasy_points, field_goals_attempted, field_goals_made," +
-      "field_goals_percentage, tree_throws_attempted, free_throws_made, free_throws_percentage," +
-      "games, minutes, offensive_rebounds, personal_fouls, plus_minus, points, possessions," +
-      "rebounds, steals, three_pointers_attempted, three_pointers_made, three_pointers_percentage," +
+      "wins, losses, assists, blocked_shots, defensive_rebounds, double_doubles, " +
+      "effective_field_goals_percentage, fantasy_points, field_goals_attempted, field_goals_made, " +
+      "field_goals_percentage, free_throws_attempted, free_throws_made, free_throws_percentage, " +
+      "games, minutes, offensive_rebounds, personal_fouls, plus_minus, points, possessions, " +
+      "rebounds, steals, three_pointers_attempted, three_pointers_made, three_pointers_percentage, " +
       "triple_doubles, true_shooting_attempts, true_shooting_percentage, turnovers," +
       "two_pointers_attempted, two_pointers_made, two_pointers_percentage";
 
@@ -217,7 +217,7 @@ export default {
     await axios
       .post(process.env.API_URL, query_data)
       .then((response) => {
-        this.team_data = response.data;
+        this.team_data = response.data[0];
       })
       .catch((error) => {
         console.log(error);
@@ -225,7 +225,7 @@ export default {
     await axios
       .post(process.env.API_URL, query_stats)
       .then((response) => {
-        this.team_stats = response.data;
+        this.team_stats = response.data[0];
       })
       .catch((error) => {
         console.log(error);
