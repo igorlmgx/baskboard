@@ -188,11 +188,13 @@ export default {
   },
   async mounted() {
     const stats_fields =
-      "wins, losses, possessions, games, fantasy_points, minutes, field_goals_made, field_goals_attempted, " +
-      "field_goals_percentage, effective_field_goals_percentage, two_pointers_made, two_pointers_attempted, two_pointers_percentage, " +
-      "three_pointers_made, three_pointers_attempted, three_pointers_percentage, free_throws_made, free_throws_attempted, free_throws_percentage, " +
-      "offensive_rebounds, defensive_rebounds, rebounds, assists, steals, blocked_shots, turnovers, personal_fouls, points, true_shooting_attempts, " +
-      "true_shooting_percentage, plus_minus, double_doubles, triple_doubles";
+      "wins, losses, assists, blocked_shots, defensive_rebounds, double_doubles," +
+      "effective_field_goals_percentage, fantasy_points, field_goals_attempted, field_goals_made," +
+      "field_goals_percentage, tree_throws_attempted, free_throws_made, free_throws_percentage," +
+      "games, minutes, offensive_rebounds, personal_fouls, plus_minus, points, possessions," +
+      "rebounds, steals, three_pointers_attempted, three_pointers_made, three_pointers_percentage," +
+      "triple_doubles, true_shooting_attempts, true_shooting_percentage, turnovers," +
+      "two_pointers_attempted, two_pointers_made, two_pointers_percentage";
 
     let player_fields =
       "players.player_id, players.photo_url, players.height, players.weight, players.jersey, player_stats.name";
